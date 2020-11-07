@@ -383,6 +383,13 @@ class Server {
     }
 
     /**
+     * @returns {string} The IP address of the server.
+     */
+    getBungee(){
+        return this.bungee
+    }
+
+    /**
      * @returns {string} The minecraft version of the server.
      */
     getMinecraftVersion(){
@@ -537,7 +544,7 @@ exports.pullRemote = function(){
         return exports.pullLocal()
     }
     return new Promise((resolve, reject) => {
-        const distroURL = 'http://mc.westeroscraft.com/WesterosCraftLauncher/distribution.json'
+        const distroURL = 'https://update.norfair.stream/launcher/distribution.json'
         //const distroURL = 'https://gist.githubusercontent.com/dscalzi/53b1ba7a11d26a5c353f9d5ae484b71b/raw/'
         const opts = {
             url: distroURL,

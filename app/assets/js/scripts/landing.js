@@ -130,7 +130,7 @@ function updateSelectedAccount(authUser){
             username = authUser.displayName
         }
         if(authUser.uuid != null){
-            document.getElementById('avatarContainer').style.backgroundImage = `url('https://crafatar.com/renders/body/${authUser.uuid}')`
+            document.getElementById('avatarContainer').style.backgroundImage = `url('https://skin.norfair.stream/renders/head/${authUser.uuid}?scale=10&default=MHF_Steve&overlay')`
         }
     }
     user_text.innerHTML = username
@@ -230,7 +230,7 @@ const refreshServerStatus = async function(fade = false){
 
     try {
         const serverURL = new URL('my://' + serv.getAddress())
-        const servStat = await ServerStatus.getStatus(serverURL.hostname, serverURL.port)
+        const servStat = await ServerStatus.getStatus(serverURL.hostname, serverURL.port, serv.getBungee())
         if(servStat.online){
             pLabel = 'PLAYERS'
             pVal = servStat.onlinePlayers + '/' + servStat.maxPlayers
@@ -241,14 +241,30 @@ const refreshServerStatus = async function(fade = false){
         loggerLanding.debug(err)
     }
     if(fade){
-        $('#server_status_wrapper').fadeOut(250, () => {
+        if (typeof serv.getBungee() === 'string' && serv.getBungee() !== false) {
+            $('#server_status_wrapper').hide()
+            $('#bungeeStatusWrapper').fadeOut(250, () => {
+
+                $('#bungeeStatusWrapper').fadeIn(500)
+            })
+        } else {
+            $('#bungeeStatusWrapper').hide()
+            $('#server_status_wrapper').fadeOut(250, () => {
+                document.getElementById('landingPlayerLabel').innerHTML = pLabel
+                document.getElementById('player_count').innerHTML = pVal
+                $('#server_status_wrapper').fadeIn(500)
+            })
+        }
+    } else {
+        if (typeof serv.getBungee() === 'string' && serv.getBungee() !== false) {
+            $('#server_status_wrapper').hide()
+            $('#bungeeStatusWrapper').show()
+        } else {
+            $('#bungeeStatusWrapper').hide()
+            $('#server_status_wrapper').show()
             document.getElementById('landingPlayerLabel').innerHTML = pLabel
             document.getElementById('player_count').innerHTML = pVal
-            $('#server_status_wrapper').fadeIn(500)
-        })
-    } else {
-        document.getElementById('landingPlayerLabel').innerHTML = pLabel
-        document.getElementById('player_count').innerHTML = pVal
+        }
     }
     
 }
@@ -686,9 +702,9 @@ function dlAsync(login = true){
                 const gameStateChange = function(data){
                     data = data.trim()
                     if(SERVER_JOINED_REGEX.test(data)){
-                        DiscordWrapper.updateDetails('Exploring the Realm!')
+                        DiscordWrapper.updateDetails('Explore le monde')
                     } else if(GAME_JOINED_REGEX.test(data)){
-                        DiscordWrapper.updateDetails('Sailing to Westeros!')
+                        DiscordWrapper.updateDetails('Dans le vortex')
                     }
                 }
 
