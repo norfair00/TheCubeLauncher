@@ -1,0 +1,140 @@
+name: CI
+
+on:
+  push:
+    branches: [ master, dev ]
+  pull_request:
+    branches: [ master, dev ]
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'info'
+      tags:
+        description: 'Test scenario tags'
+jobs:
+  CI_Linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check GitHub Status
+        uses: crazy-max/ghaction-github-status@v1
+      - name: Setup node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: package-version
+        uses: nyaascii/package-version@1.0.2-pre
+      - name: Install JS Modules
+        run: yarn install
+      - name: Checking code syntax
+        run: yarn lint
+      #- run: npm test - Fuck this, I'm not going to spend 5 hours debugging why the CI can't start a chrome process
+      - run: npm run dist -- LINUX
+      - name: Upload AppImage
+        uses: actions/upload-artifact@v2
+        with:
+          name: the-cube-launcher-setup.AppImage
+          path: dist/the-cube-launcher-setup.AppImage
+      - name: Upload deb package
+        uses: actions/upload-artifact@v2
+        with:
+          name: the-cube-launcher-setup.deb
+          path: dist/the-cube-launcher-setup.deb
+      - name: Upload rpm package
+        uses: actions/upload-artifact@v2
+        with:
+          name: the-cube-launcher-setup.rpm
+          path: dist/the-cube-launcher-setup.rpm
+      - name: Upload freedbsd package
+        uses: actions/upload-artifact@v2
+        with:
+          name: the-cube-launcher-setup.freebsd
+          path: dist/the-cube-launcher-setup.freebsd
+      - name: Upload latest-linux file
+        uses: actions/upload-artifact@v2
+        with:
+          name: latest-linux.yml
+          path: dist/latest-linux.yml
+  CI_MacOS:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        operating-system: [macos-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check GitHub Status
+        uses: crazy-max/ghaction-github-status@v1
+      - name: Setup node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: package-version
+        uses: nyaascii/package-version@1.0.2-pre
+      - name: Install JS Modules
+        run: yarn install
+      - name: Checking code syntax
+        run: yarn lint
+      #- run: npm test
+      - run: npm run dist -- MAC
+      - name: Upload dmg
+        uses: actions/upload-artifact@v2
+        with:
+          name: the-cube-launcher-setup.dmg
+          path: dist/the-cube-launcher-setup.dmg
+      - name: Upload pkg
+        uses: actions/upload-artifact@v2
+        with:
+          name: the-cube-launcher-setup.pkg
+          path: dist/the-cube-launcher-setup.pkg
+      - name: Upload blockmap
+        uses: actions/upload-artifact@v2
+        with:
+          name: the-cube-launcher-setup.dmg.blockmap
+          path: dist/the-cube-launcher-setup.dmg.blockmap
+      - name: Upload latest-mac file
+        uses: actions/upload-artifact@v2
+        with:
+          name: latest-mac.yml
+          path: dist/latest-mac.yml
+  CI_Windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        operating-system: [windows-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check GitHub Status
+        uses: crazy-max/ghaction-github-status@v1
+      - name: Setup node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: package-version
+        uses: nyaascii/package-version@1.0.2-pre
+      - name: Install JS Modules
+        run: yarn install
+      - name: Checking code syntax
+        run: yarn lint
+      #- run: npm test
+      - run: npm run dist -- WINDOWS
+      - name: Upload Artifact 1
+        uses: actions/upload-artifact@v2
+        with:
+          name: the-cube-launcher-setup.exe
+          path: dist/the-cube-launcher-setup.exe
+      - name: Upload Artifact 2
+        uses: actions/upload-artifact@v2
+        with:
+          name: the-cube-launcher-setup.exe.blockmap
+          path: dist/the-cube-launcher-setup.exe.blockmap
+      - name: Upload Artifact 3
+        uses: actions/upload-artifact@v2
+        with:
+          name: latest.yml
+          path: dist/latest.yml
+

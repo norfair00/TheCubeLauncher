@@ -1,0 +1,124 @@
+name: Upload release assets to release
+
+on: 
+  release:
+    types: [published, edited]
+ 
+
+jobs:
+  BuildForLinux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+    steps:
+      - uses: nelonoel/branch-name@v1
+      - uses: actions/checkout@v2
+      - name: Check GitHub Status
+        uses: crazy-max/ghaction-github-status@v1
+      - name: Setup node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: package-version
+        uses: nyaascii/package-version@1.0.2-pre
+      - name: Install JS Modules
+        run: yarn install
+      - name: Checking code syntax
+        run: yarn lint
+      #- run: npm test - Fuck this, I'm not going to spend 5 hours debugging why the CI can't start a chrome process
+      - run: npm run dist -- LINUX
+      - name: Upload AppImage
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: dist/the-cube-launcher-setup.AppImage xdg/shared-mime-info
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+      - name: Upload Latest Linux File
+        uses: JasonEtco/upload-to-release@master
+        with:
+          args: dist/latest-linux.yml text/yaml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+  BuildForMacOS:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        operating-system: [macos-latest]
+    steps:
+      - uses: nelonoel/branch-name@v1
+      - uses: actions/checkout@v2
+      - name: Check GitHub Status
+        uses: crazy-max/ghaction-github-status@v1
+      - name: Setup node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: package-version
+        uses: nyaascii/package-version@1.0.2-pre
+      - name: Install JS Modules
+        run: yarn install
+      - name: Checking code syntax
+        run: yarn lint
+      #- run: npm test
+      - run: npm run dist -- MAC
+      - name: Upload Dmg
+        uses: Shopify/upload-to-release@1.0.0
+        with:
+          name: the-cube-launcher-setup.dmg
+          path: dist/the-cube-launcher-setup.dmg
+          repo-token: ${{ secrets.GIT_TOKEN }}
+      - name: Upload Blockmap
+        uses: Shopify/upload-to-release@1.0.0
+        with:
+          name: the-cube-launcher-setup.dmg.blockmap
+          path: dist/the-cube-launcher-setup.dmg.blockmap
+          repo-token: ${{ secrets.GIT_TOKEN }}
+      - name: Upload Latest Mac File
+        uses: Shopify/upload-to-release@1.0.0
+        with:
+          name: latest-mac.yml
+          path: dist/latest-mac.yml
+          repo-token: ${{ secrets.GIT_TOKEN }}
+  BuildForWindows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        operating-system: [windows-latest]
+    steps:
+      - uses: nelonoel/branch-name@v1
+      - uses: actions/checkout@v2
+      - name: Check GitHub Status
+        uses: crazy-max/ghaction-github-status@v1
+      - name: Setup node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: package-version
+        uses: nyaascii/package-version@1.0.2-pre
+      - name: Install JS Modules
+        run: yarn install
+      - name: Checking code syntax
+        run: yarn lint
+      #- run: npm test
+      - run: npm run dist -- WINDOWS
+
+      - name: Upload Exe
+        uses: Shopify/upload-to-release@1.0.0
+        with:
+          name: the-cube-launcher-setup.exe
+          path: dist/the-cube-launcher-setup.exe
+          repo-token: ${{ secrets.GIT_TOKEN }}
+      - name: Upload Blockmap
+        uses: Shopify/upload-to-release@1.0.0
+        with:
+          name: the-cube-launcher-setup.exe.blockmap
+          path: dist/the-cube-launcher-setup.exe.blockmap
+          repo-token: ${{ secrets.GIT_TOKEN }}
+      - name: Upload Latest File
+        uses: Shopify/upload-to-release@1.0.0
+        with:
+          name: latest.yml
+          path: dist/latest.yml
+          repo-token: ${{ secrets.GIT_TOKEN }}
+
