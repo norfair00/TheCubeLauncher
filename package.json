@@ -1,13 +1,13 @@
 {
   "name": "thecubelauncher",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "productName": "The Cube Launcher",
   "description": "Modded Minecraft Launcher",
   "author": "Daniel Scalzi (https://github.com/dscalzi/)",
   "license": "UNLICENSED",
-  "homepage": "https://github.com/DebansCommunity/JeTestUnTrucParCeQueCaMeGonfle",
+  "homepage": "https://github.com/DebansCommunity/TheCubeLauncher",
   "bugs": {
-    "url": "https://github.com/DebansCommunity/JeTestUnTrucParCeQueCaMeGonfle/issues"
+    "url": "https://github.com/DebansCommunity/TheCubeLauncher/issues"
   },
   "private": true,
   "main": "index.js",
@@ -53,6 +53,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DebansCommunity/JeTestUnTrucParCeQueCaMeGonfle.git"
+    "url": "git+https://github.com/DebansCommunity/DebansCommunity/TheCubeLauncher.git"
   }
 }
