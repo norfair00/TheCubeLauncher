@@ -1,6 +1,6 @@
 {
   "name": "thecubelauncher",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "productName": "The Cube Launcher",
   "description": "Modded Minecraft Launcher",
   "author": "Daniel Scalzi (https://github.com/dscalzi/)",
@@ -11,9 +11,6 @@
   },
   "private": true,
   "main": "index.js",
-  "build": {
-    "publish": "always"
-  },
   "scripts": {
     "start": "electron .",
     "cilinux": "node build.js WINDOWS && node build.js LINUX",
