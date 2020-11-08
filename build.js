@@ -27,7 +27,6 @@ builder.build({
             output: 'dist'
         },
         win: {
-            publish: 'always',
             target: [
                 {
                     target: 'nsis',
@@ -42,12 +41,10 @@ builder.build({
             allowToChangeInstallationDirectory: true
         },
         mac: {
-            publish: 'always',
             target: 'dmg',
             category: 'public.app-category.games'
         },
         linux: {
-            publish: 'always',
             target: 'AppImage',
             maintainer: 'Nicolas Favre',
             vendor: 'Nicolas Favre',
