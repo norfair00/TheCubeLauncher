@@ -12,7 +12,7 @@
   "private": true,
   "main": "index.js",
   "build": {
-    "publish": ["github"]
+    "publish": "always"
   },
   "scripts": {
     "start": "electron .",
