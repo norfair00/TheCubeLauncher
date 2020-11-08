@@ -22,12 +22,12 @@ builder.build({
         productName: 'The Cube Launcher',
         artifactName: '${productName}-setup-${version}.${ext}',
         copyright: 'Copyright © 2018-2020 Nicolas Favre',
-        publish: 'always',
         directories: {
             buildResources: 'build',
             output: 'dist'
         },
         win: {
+            publish: 'always',
             target: [
                 {
                     target: 'nsis',
@@ -42,10 +42,12 @@ builder.build({
             allowToChangeInstallationDirectory: true
         },
         mac: {
+            publish: 'always',
             target: 'dmg',
             category: 'public.app-category.games'
         },
         linux: {
+            publish: 'always',
             target: 'AppImage',
             maintainer: 'Nicolas Favre',
             vendor: 'Nicolas Favre',
